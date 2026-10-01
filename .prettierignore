@@ -7,3 +7,4 @@ test-results
 package-lock.json
 *.tsbuildinfo
 public/mockServiceWorker.js
+.claude/settings.local.json

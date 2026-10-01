@@ -36,3 +36,6 @@ coverage
 playwright-report
 test-results
 .vitest
+
+# Claude Code: personal overrides stay local; shared settings, commands and agents are committed
+.claude/settings.local.json

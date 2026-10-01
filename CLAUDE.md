@@ -106,3 +106,16 @@ same shell and patterns. Product identity lives in `src/config/app.ts` and `VITE
 Do not implement future business modules (Product CRUD, stock engine, purchasing/sales workflows,
 accounting, CRM, POS, HR, payroll, billing, real authentication) unless explicitly requested.
 Placeholders and shared foundations only, until a phase asks for more.
+
+## Working with Claude Code
+
+Project configuration lives in `.claude/` and is committed:
+
+- `settings.json`: allowlisted commands (npm scripts, generators, read-only git), commands that
+  always ask (commit, push, dependency changes), denied operations (force push, hard reset,
+  production env files), and a hook that formats every edited file with Prettier.
+- Slash commands: `/check` (all quality gates), `/new-module <key> <Entity> [master]`,
+  `/add-mock <METHOD> <path>`, `/review [scope]`.
+- Agent: `frontend-reviewer` checks a diff against these rules.
+
+Personal overrides go in `.claude/settings.local.json` (git-ignored).
