@@ -1,10 +1,25 @@
 import '@testing-library/jest-dom/vitest';
 
 import { cleanup } from '@testing-library/react';
-import { afterEach, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+
+import { resetMockData } from '@/mocks/handlers';
+import { server } from '@/mocks/server';
+import { resetTokenRefreshState } from '@/services/api/tokenRefresh';
+
+beforeAll(() => {
+  server.listen({ onUnhandledFrame: 'error' });
+});
 
 afterEach(() => {
   cleanup();
+  server.resetHandlers();
+  resetMockData();
+  resetTokenRefreshState();
+});
+
+afterAll(() => {
+  server.close();
 });
 
 // Ant Design's responsive observer and our theme hook rely on matchMedia.
@@ -36,7 +51,6 @@ if (typeof window !== 'undefined') {
     value: (element: Element) => ({
       ...({} as CSSStyleDeclaration),
       getPropertyValue: () => '',
-      // antd reads these when measuring inputs.
       paddingLeft: '0px',
       paddingRight: '0px',
       borderLeftWidth: '0px',
@@ -45,4 +59,8 @@ if (typeof window !== 'undefined') {
       display: element instanceof HTMLElement ? 'block' : '',
     }),
   });
+
+  window.scrollTo ??= vi.fn();
+  URL.createObjectURL ??= vi.fn(() => 'blob:mock');
+  URL.revokeObjectURL ??= vi.fn();
 }

@@ -18,11 +18,10 @@ import {
   ToolOutlined,
   WalletOutlined,
 } from '@ant-design/icons';
-import type { ReactNode } from 'react';
-
 import { ROUTES } from '@/constants/routes';
-import type { ModuleKey } from '@/config/modules';
 import { isModuleEnabled } from '@/config/modules';
+import type { ModuleManifest, ModuleNavItem } from '@/features/core/moduleManifest';
+import { MODULE_MANIFESTS } from '@/features/registry';
 import type { PermissionKey } from '@/types/permission';
 
 /**
@@ -31,17 +30,13 @@ import type { PermissionKey } from '@/types/permission';
  * `permission` is used later for permission-aware menu rendering (UX only).
  * `module` ties the item to module availability (see config/modules.ts).
  */
-export interface NavItem {
-  key: string;
-  label: string;
-  icon?: ReactNode;
-  path?: string;
-  module: ModuleKey;
-  permission?: PermissionKey;
-  children?: NavItem[];
-}
+export type NavItem = ModuleNavItem;
 
-export const NAVIGATION: NavItem[] = [
+/**
+ * Placeholder navigation for modules that have no manifest yet. A module's
+ * manifest (`src/features/<key>/module.tsx`) replaces its entry here.
+ */
+const PLACEHOLDER_NAVIGATION: NavItem[] = [
   {
     key: 'dashboard',
     label: 'Dashboard',
@@ -322,6 +317,35 @@ export const NAVIGATION: NavItem[] = [
 
 /** Icon used for modules that have none configured. */
 export const DEFAULT_MODULE_ICON = <AppstoreOutlined />;
+
+function manifestToNavItem(manifest: ModuleManifest, base?: NavItem): NavItem {
+  const children = manifest.navigation;
+  return {
+    key: base?.key ?? manifest.key,
+    label: manifest.label,
+    icon: manifest.icon ?? base?.icon ?? DEFAULT_MODULE_ICON,
+    module: manifest.key,
+    permission: manifest.permission ?? base?.permission,
+    ...(children?.length ? { children } : { path: manifest.basePath }),
+  };
+}
+
+/** Builds the navigation tree: placeholders, overridden by registered module manifests. */
+export function buildNavigation(
+  placeholders: NavItem[] = PLACEHOLDER_NAVIGATION,
+  manifests: ModuleManifest[] = MODULE_MANIFESTS,
+): NavItem[] {
+  const byKey = new Map(manifests.map((m) => [m.key, m] as const));
+  const merged = placeholders.map((item) => {
+    const manifest = byKey.get(item.module);
+    return manifest ? manifestToNavItem(manifest, item) : item;
+  });
+  const covered = new Set(placeholders.map((item) => item.module));
+  const extra = manifests.filter((m) => !covered.has(m.key)).map((m) => manifestToNavItem(m));
+  return [...merged, ...extra];
+}
+
+export const NAVIGATION: NavItem[] = buildNavigation();
 
 /**
  * Returns the navigation tree filtered by module availability and, optionally,

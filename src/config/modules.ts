@@ -5,8 +5,11 @@
  * be fed from the tenant's subscription plan returned by the backend. Disabling a
  * module hides its navigation and routes; it is NOT an authorization control.
  */
+import { env } from '@/config/env';
+
 export const MODULE_KEYS = [
   'dashboard',
+  'developer',
   'crm',
   'sales',
   'purchasing',
@@ -24,6 +27,7 @@ export const MODULE_KEYS = [
   'reports',
   'settings',
   'administration',
+  // <module-keys>
 ] as const;
 
 export type ModuleKey = (typeof MODULE_KEYS)[number];
@@ -39,6 +43,12 @@ export interface ModuleDefinition {
 
 export const MODULES: Record<ModuleKey, ModuleDefinition> = {
   dashboard: { key: 'dashboard', label: 'Dashboard', enabled: true, stage: 'foundation' },
+  developer: {
+    key: 'developer',
+    label: 'Developer',
+    enabled: env.devToolsEnabled,
+    stage: 'foundation',
+  },
   crm: { key: 'crm', label: 'CRM', enabled: true, stage: 'planned' },
   sales: { key: 'sales', label: 'Sales', enabled: true, stage: 'planned' },
   purchasing: { key: 'purchasing', label: 'Purchasing', enabled: true, stage: 'planned' },

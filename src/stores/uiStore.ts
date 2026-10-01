@@ -12,12 +12,15 @@ interface UiState {
   mobileNavOpen: boolean;
   themeMode: ThemeMode;
   tableDensity: TableDensity;
+  /** Explicit UI language; null follows user → tenant → default. */
+  language: string | null;
 
   toggleSidebar: () => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
   setMobileNavOpen: (open: boolean) => void;
   setThemeMode: (mode: ThemeMode) => void;
   setTableDensity: (density: TableDensity) => void;
+  setLanguage: (language: string | null) => void;
 }
 
 export const useUiStore = create<UiState>()(
@@ -27,12 +30,14 @@ export const useUiStore = create<UiState>()(
       mobileNavOpen: false,
       themeMode: 'system',
       tableDensity: 'compact',
+      language: null,
 
       toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
       setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
       setMobileNavOpen: (open) => set({ mobileNavOpen: open }),
       setThemeMode: (mode) => set({ themeMode: mode }),
       setTableDensity: (density) => set({ tableDensity: density }),
+      setLanguage: (language) => set({ language }),
     }),
     {
       name: STORAGE_KEYS.uiPreferences,
@@ -41,6 +46,7 @@ export const useUiStore = create<UiState>()(
         sidebarCollapsed: state.sidebarCollapsed,
         themeMode: state.themeMode,
         tableDensity: state.tableDensity,
+        language: state.language,
       }),
     },
   ),

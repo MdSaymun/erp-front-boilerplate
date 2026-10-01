@@ -28,3 +28,31 @@ body {
   width: 100%;
   overflow-x: auto;
 }
+
+/* Print: only the record content, no chrome. */
+@media print {
+  .ant-layout-sider,
+  .ant-layout-header,
+  .erp-no-print,
+  .ant-drawer,
+  .ant-modal-root {
+    display: none !important;
+  }
+
+  .ant-layout-content {
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -8,7 +8,7 @@ describe('Dashboard route', () => {
     renderApp('/dashboard');
 
     expect(await screen.findByRole('heading', { name: 'Dashboard', level: 3 })).toBeInTheDocument();
-    expect(screen.getByText('Total Products')).toBeInTheDocument();
+    expect(await screen.findByText('Total Products')).toBeInTheDocument();
     expect(screen.getByText('Low Stock')).toBeInTheDocument();
     expect(screen.getByText('Pending Purchases')).toBeInTheDocument();
     expect(screen.getByText('Pending Deliveries')).toBeInTheDocument();

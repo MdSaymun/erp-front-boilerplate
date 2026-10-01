@@ -24,6 +24,8 @@ export const ROUTES = {
   unauthorized: '/unauthorized',
   forbidden: '/forbidden',
   serverError: '/server-error',
+  /** Developer-only pattern showcase; mounted only when env.devToolsEnabled. */
+  devPatterns: '/_dev/patterns',
 } as const;
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];

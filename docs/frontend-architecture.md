@@ -2,10 +2,10 @@
 
 ## Purpose
 
-The frontend is a modular ERP client. Inventory is the first module; the architecture is
-designed so CRM, Sales, Purchasing, Accounting, POS, Manufacturing, HR, Payroll, Expenses,
-Projects, Assets, Helpdesk, E-commerce, Reports, Settings and Administration slot in without
-reworking the shell.
+The frontend is a product-agnostic modular ERP client (a boilerplate). Business modules
+(CRM, Sales, Purchasing, Inventory, Accounting, POS, Manufacturing, HR, Payroll, Expenses,
+Projects, Assets, Helpdesk, E-commerce, Reports, Settings, Administration) slot in through
+module manifests without reworking the shell.
 
 ## Application layers
 
@@ -132,6 +132,14 @@ against a production build. See `frontend-testing-strategy.md`.
 Pages are lazy-loaded per route so future modules do not load eagerly. Global state is minimal.
 Server data is cached by TanStack Query. Wide tables scroll inside `.erp-table-wrapper`.
 
+## Standard ERP patterns
+
+See `frontend-ui-patterns.md` for the shared list / record / form frameworks, the
+data-access factories, authorization UX, i18n, shortcuts, command palette,
+notifications, branding, realtime and the mock API. The developer showcase at
+`/_dev/patterns` (mounted only when `env.devToolsEnabled`) exercises every pattern
+on a neutral sample entity served by Mock Service Worker.
+
 ## Tooling notes (versions chosen on 2026-09-30)
 
 - **TypeScript is pinned to `~6.0`** although 7.x is published: `typescript-eslint` 8.x supports
@@ -146,3 +154,6 @@ Server data is cached by TanStack Query. Wide tables scroll inside `.erp-table-w
 - **eslint-plugin-react-hooks 7** ships React Compiler rules (e.g. no `setState` in effects);
   Playwright fixtures' `use` callback is exempted from `rules-of-hooks` in `eslint.config.js`.
 - **Playwright** has a built-in `isMobile` fixture; custom fixtures must not reuse that name.
+- **MSW 3** imports `http`/`HttpResponse` from `msw/http`, uses `onUnhandledFrame`, and ships a Vite plugin (`msw/vite`); we use the explicit worker (`public/mockServiceWorker.js`, regenerate with `npx msw init public/ --save`).
+- **Vitest + axios**: jsdom is configured with the API origin (`environmentOptions.jsdom.url`) so requests are same-origin and no CORS preflight reaches MSW.
+- **React 19 `useEffectEvent`** is used where a stable callback must be read from an effect (shortcuts, realtime, navigation guard) because eslint-plugin-react-hooks 7 forbids writing refs during render.

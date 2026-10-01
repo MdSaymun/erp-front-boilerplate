@@ -17,12 +17,23 @@
   second real reuse, not the first imagined one.
 - No inline business logic in JSX; move it to hooks or pure functions.
 
+## Standard patterns (use, do not reinvent)
+
+- Lists: `DataTable` + `useListQueryState`; never hand-roll paging/sorting state.
+- Records: `RecordPage`, `DocumentActionBar` driven by `useWorkflowActions`.
+- Forms: `FormPage`, `ControlledFormItem`, shared inputs, `EditableLinesTable`,
+  `applyServerErrors`, `ConcurrencyConflictModal`.
+- Data: `createResourceApi` + `createResourceHooks`; company-scoped query keys only.
+- Strings shown to users go through `useTranslation()`; add keys to `src/i18n/locales`.
+- Mock endpoints live in `src/mocks/handlers` and are never imported by app code.
+
 ## Hooks
 
 - Server data: TanStack Query hooks in `features/<module>/hooks/`, one file per resource, with a
   `keys` object for query keys.
 - UI state: Zustand selectors (`useUiStore((s) => s.x)`) to avoid re-renders.
 - Never call `setState` synchronously inside `useEffect`; derive or adjust during render.
+- Never write `ref.current` during render; use `useEffectEvent` or effects (lint-enforced).
 
 ## Feature rules
 

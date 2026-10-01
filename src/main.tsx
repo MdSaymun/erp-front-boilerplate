@@ -16,7 +16,18 @@ const root = createRoot(container);
  * Loading it dynamically lets a misconfigured deployment show a readable message
  * instead of a blank page. No configuration details are rendered; see the console.
  */
-import('./app/App')
+async function bootstrap() {
+  const { env } = await import('./config/env');
+  document.title = env.appName;
+  if (env.mockApi) {
+    // Development/test only: serve the API contract from Mock Service Worker.
+    const { startMockApi } = await import('./mocks/browser');
+    await startMockApi();
+  }
+  return import('./app/App');
+}
+
+bootstrap()
   .then(({ App }) => {
     root.render(
       <StrictMode>

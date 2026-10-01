@@ -3,14 +3,17 @@ import type { PropsWithChildren } from 'react';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 
 import { QueryProvider } from './QueryProvider';
+import { RealtimeProvider } from './RealtimeProvider';
 import { ThemeProvider } from './ThemeProvider';
 
-/** Composition root for global providers. Order: error boundary > theme > server state. */
+/** Composition root for global providers. Order: error boundary > theme/locale > server state > realtime. */
 export function AppProviders({ children }: PropsWithChildren) {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <RealtimeProvider>{children}</RealtimeProvider>
+        </QueryProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

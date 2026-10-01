@@ -1,6 +1,7 @@
 import { theme as antdTheme, type ThemeConfig } from 'antd';
 
 import { APP_SHELL } from '@/constants/app';
+import type { TenantBranding } from '@/types/tenant';
 
 export type ResolvedThemeMode = 'light' | 'dark';
 
@@ -32,13 +33,24 @@ const sharedTokens: ThemeConfig['token'] = {
  * Component overrides aim for an ERP feel: compact tables, moderate control
  * heights, and a restrained header/sider. Adjust here, never inline in pages.
  */
-export function buildTheme(mode: ResolvedThemeMode): ThemeConfig {
+const HEX_COLOR = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+/** Accepts only a safe hex colour from tenant settings. */
+export function resolveBrandColor(branding?: TenantBranding): string | undefined {
+  const color = branding?.primaryColor?.trim();
+  return color && HEX_COLOR.test(color) ? color : undefined;
+}
+
+export function buildTheme(mode: ResolvedThemeMode, branding?: TenantBranding): ThemeConfig {
   const isDark = mode === 'dark';
+  const brandColor = resolveBrandColor(branding);
 
   return {
     hashed: false,
     algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
-    token: sharedTokens,
+    token: brandColor
+      ? { ...sharedTokens, colorPrimary: brandColor, colorInfo: brandColor }
+      : sharedTokens,
     components: {
       Layout: {
         headerHeight: APP_SHELL.headerHeight,

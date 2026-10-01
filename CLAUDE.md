@@ -1,13 +1,26 @@
-# CLAUDE.md — Inventory SaaS frontend
+# CLAUDE.md — ERP frontend boilerplate
 
-Permanent rules for anyone (human or AI) working in this repository.
+Permanent rules for anyone (human or AI) working in this repository or a product copied
+from it.
 
 ## Product
 
-Inventory SaaS is the **first module of a complete ERP SaaS platform**. Do not design
-anything as if inventory were the whole product. CRM, Sales, Purchasing, Accounting, POS,
-Manufacturing, HR, Payroll, Expenses, Projects, Assets, Helpdesk, E-commerce, Reports,
-Settings and Administration will reuse everything built here.
+This is a **product-agnostic frontend boilerplate for a multi-tenant ERP SaaS**. A product
+is created by copying it, running `npm run init:project`, and adding business modules with
+`npm run generate:module`. Never design anything as if one module were the whole product:
+CRM, Sales, Purchasing, Inventory, Accounting, POS, Manufacturing, HR, Payroll, Expenses,
+Projects, Assets, Helpdesk, E-commerce, Reports, Settings and Administration all reuse the
+same shell and patterns. Product identity lives in `src/config/app.ts` and `VITE_APP_NAME`.
+
+## Modules
+
+- A module is `src/features/<key>/` with a **manifest** (`module.tsx`: routes, navigation,
+  permissions, widgets, commands) registered in `src/features/registry.ts`. The shell mounts
+  manifests automatically; never hard-code module routes or menus in the shell.
+- Generate modules with `npm run generate:module -- <key> --entity <Entity> [--kind master]`;
+  the generator also adds the mock handler and the module key. Then edit, do not re-generate.
+- Marker comments (`// <module-imports>`, `// <mock-handlers>`, `// <module-keys>`, ...) are
+  used by the generator; keep them in place.
 
 ## Architecture
 
@@ -19,6 +32,23 @@ Settings and Administration will reuse everything built here.
 - Path alias `@/` → `src/` (tsconfig.app.json paths + vite.config.ts alias)
 - See `docs/frontend-architecture.md`, `docs/frontend-development-rules.md`,
   `docs/frontend-module-strategy.md`, `docs/frontend-testing-strategy.md`
+
+## Standard ERP patterns (always reuse)
+
+- List pages: `DataTable` + `useListQueryState` (`src/components/data-table`, `src/hooks`).
+- Record pages: `RecordPage` + `DocumentHeader` + `RecordStageBar` + `useWorkflowActions` +
+  `RecordTabs` + `Chatter` (`src/components/records`, `src/components/chatter`).
+- Form pages: `FormPage` + `ControlledFormItem` + inputs in `src/components/forms/inputs` +
+  `EditableLinesTable` + `applyServerErrors` + `ConcurrencyConflictModal`.
+- Data: `createResourceApi` (`src/services/api/resource.ts`) + `createResourceHooks`
+  (`src/hooks/resource`). Query keys are company-scoped via `resourceKeys`.
+- Platform: i18n (`src/i18n`, `useTranslation`), shortcuts (`useShortcut`), command palette
+  (`registerCommands`), notifications (`useNotifications`), widgets (`registerWidgets`),
+  realtime (`useRealtimeEvent`), tenant branding (`tenant.branding`).
+- Mock API: `src/mocks` (MSW). App code never imports it except the dynamic import in
+  `src/main.tsx`. Add a handler per pending endpoint; delete it when the backend ships.
+- Developer showcase: `/_dev/patterns` (only when `env.devToolsEnabled`). Keep it working;
+  it is the living reference for every pattern. See `docs/frontend-ui-patterns.md`.
 
 ## State
 
@@ -68,7 +98,8 @@ Settings and Administration will reuse everything built here.
   must all pass before a commit. Husky + lint-staged run ESLint/Prettier on staged files.
 - Tests: Vitest + Testing Library (`*.test.ts(x)` next to the code), Playwright smoke in `e2e/`.
 - Small files, small components; no thousand-line page components. Avoid premature abstraction.
-- Read `import.meta.env` only in `src/config/env.ts`.
+- Read `import.meta.env` only in `src/config/env.ts`. `VITE_MOCK_API` must never be true in production (env.ts throws).
+- Never write `ref.current` during render (react-hooks 7); use `useEffectEvent`.
 
 ## Scope discipline
 

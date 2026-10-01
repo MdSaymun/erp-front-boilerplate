@@ -1,4 +1,5 @@
 import type { ModuleKey } from '@/config/modules';
+import type { PermissionKey } from '@/types/permission';
 
 /** Metadata attached to routes via `handle`; read with `useMatches()`. */
 export interface RouteHandle {
@@ -8,6 +9,10 @@ export interface RouteHandle {
   title?: string;
   /** Owning ERP module (drives placeholders and module availability). */
   module?: ModuleKey;
+  /** Permission required to view (UX only; enforced by PermissionRoute). */
+  permission?: PermissionKey;
+  /** Mark developer-only routes. */
+  dev?: boolean;
 }
 
 export function isRouteHandle(value: unknown): value is RouteHandle {

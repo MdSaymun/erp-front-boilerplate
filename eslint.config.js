@@ -15,6 +15,7 @@ export default defineConfig([
     'playwright-report',
     'test-results',
     '.vitest',
+    'public/mockServiceWorker.js',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
@@ -42,7 +43,13 @@ export default defineConfig([
   },
   {
     // Test files and route/config modules legitimately export non-components.
-    files: ['**/*.test.{ts,tsx}', 'src/test/**', 'src/app/router/**', 'src/config/**'],
+    files: [
+      '**/*.test.{ts,tsx}',
+      'src/test/**',
+      'src/app/router/**',
+      'src/app/providers/**',
+      'src/config/**',
+    ],
     rules: {
       'react-refresh/only-export-components': 'off',
     },

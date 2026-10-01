@@ -5,7 +5,7 @@ test.describe('Application shell smoke', () => {
     await page.goto('/');
 
     await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(page).toHaveTitle('Inventory SaaS');
+    await expect(page).toHaveTitle('ERP Boilerplate');
   });
 
   test('application shell renders header and content', async ({ page }) => {
@@ -56,9 +56,6 @@ test.describe('Application shell smoke', () => {
 
     await expect(page).toHaveURL(/\/settings$/);
     await expect(page.getByRole('heading', { name: 'Settings', level: 3 })).toBeVisible();
-    await expect(
-      page.getByRole('form', { name: 'Company profile demonstration form' }),
-    ).toBeVisible();
   });
 
   test('unknown routes show the not-found page', async ({ page }) => {

@@ -21,7 +21,7 @@ export function DocumentHeader({ number, title, status, summary, actions }: Docu
     <Flex vertical gap={12}>
       <Flex justify="space-between" align="flex-start" wrap gap={12}>
         <Space align="center">
-          <Typography.Title level={3} style={{ margin: 0 }}>
+          <Typography.Title level={4} style={{ margin: 0 }}>
             {number}
           </Typography.Title>
           <DocumentStatusTag status={status} />

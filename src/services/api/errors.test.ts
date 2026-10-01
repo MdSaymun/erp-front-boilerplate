@@ -42,12 +42,12 @@ describe('normalizeApiError', () => {
     expect(error.code).toBe('validation');
     expect(error.validationErrors).toEqual([
       { field: 'name', messages: ['Name is required.'] },
-      { field: 'lines[0].Quantity', messages: ['Must be positive.'] },
+      { field: 'lines.0.quantity', messages: ['Must be positive.'] },
     ]);
 
     const seen: string[] = [];
     forEachValidationError(error, (field, message) => seen.push(`${field}=${message}`));
-    expect(seen).toEqual(['name=Name is required.', 'lines[0].Quantity=Must be positive.']);
+    expect(seen).toEqual(['name=Name is required.', 'lines.0.quantity=Must be positive.']);
   });
 
   it.each([

@@ -6,3 +6,4 @@ test-results
 .vitest
 package-lock.json
 *.tsbuildinfo
+public/mockServiceWorker.js

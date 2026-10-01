@@ -12,9 +12,11 @@ interface ControlledFormItemProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 > extends Pick<UseControllerProps<TFieldValues, TName>, 'control' | 'name'> {
-  label: ReactNode;
+  label?: ReactNode;
   required?: boolean;
   help?: ReactNode;
+  /** Grid-cell mode: no label, no bottom margin. */
+  compact?: boolean;
   /** Render the Ant Design input, spreading `field` onto it. */
   render: (field: ControllerRenderProps<TFieldValues, TName>, id: string) => ReactElement;
 }
@@ -27,7 +29,15 @@ interface ControlledFormItemProps<
 export function ControlledFormItem<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
->({ control, name, label, required, help, render }: ControlledFormItemProps<TFieldValues, TName>) {
+>({
+  control,
+  name,
+  label,
+  required,
+  help,
+  compact,
+  render,
+}: ControlledFormItemProps<TFieldValues, TName>) {
   const id = `field-${String(name)}`;
 
   return (
@@ -36,11 +46,12 @@ export function ControlledFormItem<
       name={name}
       render={({ field, fieldState }) => (
         <Form.Item
-          label={label}
+          label={compact ? undefined : label}
           htmlFor={id}
           required={required}
           validateStatus={fieldState.error ? 'error' : undefined}
           help={fieldState.error?.message ?? help}
+          style={compact ? { marginBottom: 0 } : undefined}
         >
           {render(field, id)}
         </Form.Item>

@@ -8,6 +8,7 @@ import { SideNav } from '@/components/navigation/SideNav';
 import { env } from '@/config/env';
 import { APP_SHELL } from '@/constants/app';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { useTenantStore } from '@/stores/tenantStore';
 import { useUiStore } from '@/stores/uiStore';
 
 const { Header, Sider, Content } = Layout;
@@ -23,6 +24,7 @@ export function DashboardLayout() {
   const toggleSidebar = useUiStore((state) => state.toggleSidebar);
   const mobileNavOpen = useUiStore((state) => state.mobileNavOpen);
   const setMobileNavOpen = useUiStore((state) => state.setMobileNavOpen);
+  const logoUrl = useTenantStore((state) => state.currentTenant?.branding?.logoUrl);
 
   const handleToggleNav = () => {
     if (isMobile) {
@@ -43,9 +45,17 @@ export function DashboardLayout() {
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
       }}
     >
-      <Typography.Text strong style={{ fontSize: collapsed ? 18 : 15, whiteSpace: 'nowrap' }}>
-        {collapsed ? env.appName.charAt(0) : env.appName}
-      </Typography.Text>
+      {logoUrl ? (
+        <img
+          src={logoUrl}
+          alt={env.appName}
+          style={{ maxHeight: 28, maxWidth: collapsed ? 32 : 180, objectFit: 'contain' }}
+        />
+      ) : (
+        <Typography.Text strong style={{ fontSize: collapsed ? 18 : 15, whiteSpace: 'nowrap' }}>
+          {collapsed ? env.appName.charAt(0) : env.appName}
+        </Typography.Text>
+      )}
     </div>
   );
 

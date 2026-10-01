@@ -1,0 +1,112 @@
+{
+  "app": {
+    "name": "ERP",
+    "skipToContent": "Skip to main content"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "keep": "Keep",
+    "close": "Close",
+    "retry": "Retry",
+    "tryAgain": "Try again",
+    "reload": "Reload",
+    "export": "Export",
+    "import": "Import",
+    "print": "Print",
+    "search": "Search",
+    "refresh": "Refresh",
+    "goToDashboard": "Go to dashboard",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "markAllRead": "Mark all as read"
+  },
+  "nav": {
+    "mainNavigation": "Main navigation",
+    "openNavigation": "Open navigation",
+    "collapseNavigation": "Collapse navigation",
+    "breadcrumb": "Breadcrumb",
+    "notifications": "Notifications",
+    "userMenu": "User menu for {{name}}",
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "help": "Help & shortcuts",
+    "about": "About",
+    "globalSearch": "Search or jump to… (Ctrl+K)",
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme",
+    "currentCompany": "Current company",
+    "noTenant": "No tenant",
+    "noCompany": "No company selected",
+    "guest": "Guest"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "theme": "Theme",
+    "themeSystem": "Follow system",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "density": "Table density",
+    "densityCompact": "Compact",
+    "densityComfortable": "Comfortable",
+    "language": "Language",
+    "languageAuto": "Automatic (from profile)"
+  },
+  "status": {
+    "loading": "Loading",
+    "demoData": "Demo data",
+    "placeholder": "Placeholder"
+  },
+  "errors": {
+    "somethingWrong": "Something went wrong",
+    "unexpected": "An unexpected error occurred.",
+    "pageNotFound": "Page not found",
+    "pageNotFoundDetail": "The page you are looking for does not exist or has moved.",
+    "signInRequired": "Sign-in required",
+    "signInRequiredDetail": "Your session has expired or you are not signed in.",
+    "accessDenied": "Access denied",
+    "accessDeniedDetail": "You do not have permission to view this page. Contact your administrator if you believe this is a mistake.",
+    "serverError": "Server error",
+    "serverErrorDetail": "Something went wrong on our side. Please try again in a moment.",
+    "reference": "Reference: {{traceId}}"
+  },
+  "forms": {
+    "unsavedTitle": "Discard unsaved changes?",
+    "unsavedDescription": "You have changes that have not been saved. Leaving this page will discard them.",
+    "discard": "Discard",
+    "keepEditing": "Keep editing",
+    "correctFollowing": "Please correct the following",
+    "addLine": "Add line",
+    "noLines": "No lines yet"
+  },
+  "list": {
+    "selected": "{{count}} selected",
+    "clearSelection": "Clear selection",
+    "columns": "Columns",
+    "showAll": "Show all",
+    "views": "Views",
+    "saveView": "Save current view…",
+    "nothingHere": "Nothing here yet",
+    "rangeOfTotal": "{{from}}–{{to}} of {{total}}"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You're all caught up",
+    "unread": "{{count}} unread"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "save": "Save the current form",
+    "commandPalette": "Open command palette",
+    "help": "Show keyboard shortcuts"
+  },
+  "about": {
+    "title": "About {{name}}",
+    "version": "Version {{version}}",
+    "environment": "Environment: {{environment}}"
+  }
+}

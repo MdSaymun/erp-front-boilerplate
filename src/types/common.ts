@@ -49,4 +49,9 @@ export interface SelectOption<TValue extends string | number = string> {
   disabled?: boolean;
 }
 
+/** Optimistic-concurrency token returned by the backend (SQL Server rowversion, base64). */
+export interface ConcurrencyFields {
+  rowVersion: string;
+}
+
 export type Nullable<T> = T | null;

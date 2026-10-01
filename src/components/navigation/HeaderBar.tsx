@@ -7,8 +7,14 @@ import {
   SunOutlined,
 } from '@ant-design/icons';
 import { Badge, Button, Flex, Input, Space, Typography } from 'antd';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { CommandPalette } from '@/components/command-palette/CommandPalette';
+import { NotificationsDrawer } from '@/components/notifications/NotificationsDrawer';
 import { env } from '@/config/env';
+import { useNotifications } from '@/hooks/useNotifications';
+import { useShortcut } from '@/hooks/useShortcut';
 import { useUiStore } from '@/stores/uiStore';
 import { useResolvedThemeMode } from '@/theme/useResolvedThemeMode';
 
@@ -21,10 +27,23 @@ interface HeaderBarProps {
   onToggleNav: () => void;
 }
 
-/** Application header: nav toggle, brand, global search, context, alerts, user. */
+/** Application header: nav toggle, brand, command palette, context, alerts, user. */
 export function HeaderBar({ isMobile, collapsed, onToggleNav }: HeaderBarProps) {
+  const { t } = useTranslation();
   const resolvedMode = useResolvedThemeMode();
   const setThemeMode = useUiStore((state) => state.setThemeMode);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notifications = useNotifications();
+
+  useShortcut({
+    id: 'command-palette',
+    keys: 'mod+k',
+    scope: 'global',
+    description: t('shortcuts.commandPalette'),
+    allowInInput: true,
+    handler: () => setPaletteOpen(true),
+  });
 
   const toggleTheme = () => setThemeMode(resolvedMode === 'dark' ? 'light' : 'dark');
 
@@ -33,7 +52,7 @@ export function HeaderBar({ isMobile, collapsed, onToggleNav }: HeaderBarProps) 
       <Space size="small" align="center">
         <Button
           type="text"
-          aria-label={collapsed || isMobile ? 'Open navigation' : 'Collapse navigation'}
+          aria-label={collapsed || isMobile ? t('nav.openNavigation') : t('nav.collapseNavigation')}
           aria-expanded={!collapsed}
           icon={collapsed || isMobile ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={onToggleNav}
@@ -45,11 +64,15 @@ export function HeaderBar({ isMobile, collapsed, onToggleNav }: HeaderBarProps) 
 
       {isMobile ? null : (
         <Input
-          allowClear
+          readOnly
           prefix={<SearchOutlined aria-hidden />}
-          placeholder="Search records (coming soon)"
+          placeholder={t('nav.globalSearch')}
           aria-label="Global search"
-          style={{ maxWidth: 360 }}
+          onClick={() => setPaletteOpen(true)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') setPaletteOpen(true);
+          }}
+          style={{ maxWidth: 360, cursor: 'pointer' }}
         />
       )}
 
@@ -57,15 +80,23 @@ export function HeaderBar({ isMobile, collapsed, onToggleNav }: HeaderBarProps) 
         {isMobile ? null : <ContextSwitcher />}
         <Button
           type="text"
-          aria-label={resolvedMode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          aria-label={resolvedMode === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')}
           icon={resolvedMode === 'dark' ? <SunOutlined /> : <MoonOutlined />}
           onClick={toggleTheme}
         />
-        <Badge count={0} showZero={false}>
-          <Button type="text" aria-label="Notifications" icon={<BellOutlined />} />
+        <Badge count={notifications.unreadCount} size="small" overflowCount={99}>
+          <Button
+            type="text"
+            aria-label={t('nav.notifications')}
+            icon={<BellOutlined />}
+            onClick={() => setNotificationsOpen(true)}
+          />
         </Badge>
         <UserMenu />
       </Space>
+
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <NotificationsDrawer open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
     </Flex>
   );
 }

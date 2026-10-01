@@ -32,9 +32,10 @@ export default defineConfig({
     // A production build reads .env.production (git-ignored) or CI variables; supply
     // explicit public values here so the smoke suite never depends on local files.
     env: {
-      VITE_APP_NAME: 'Inventory SaaS',
+      VITE_APP_NAME: 'ERP Boilerplate',
       VITE_API_BASE_URL: 'http://localhost:5000/api',
       VITE_ENVIRONMENT: 'test',
+      VITE_MOCK_API: 'true',
     },
   },
 });

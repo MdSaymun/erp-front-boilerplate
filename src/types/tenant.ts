@@ -8,6 +8,13 @@ export type SubscriptionStatus = 'trial' | 'active' | 'past_due' | 'suspended' |
  * The frontend never derives TenantId from user input; the backend resolves it
  * from the authenticated principal.
  */
+/** Per-tenant visual identity applied to the shell. */
+export interface TenantBranding {
+  logoUrl?: string;
+  /** Hex colour, e.g. "#1d5fb4". Validated before use. */
+  primaryColor?: string;
+}
+
 export interface Tenant {
   id: Id;
   name: string;
@@ -17,5 +24,6 @@ export interface Tenant {
   subscriptionStatus?: SubscriptionStatus;
   defaultLocale?: LocaleTag;
   defaultTimeZone?: TimeZoneId;
+  branding?: TenantBranding;
   createdAt?: IsoDateTimeString;
 }

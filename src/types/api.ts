@@ -89,6 +89,17 @@ export interface ListQuery extends Pagination {
   search?: string;
   sort?: Sort[];
   filters?: Filter[];
+  /** Reserved for server-side grouping; not supported by any endpoint yet. */
+  groupBy?: string;
+}
+
+export type ExportFormat = 'csv' | 'xlsx' | 'pdf';
+
+/** Result of a bulk import run. */
+export interface ImportResult {
+  imported: number;
+  failed: number;
+  errors: Array<{ row: number; field?: string; message: string }>;
 }
 
 /** Standard paged response envelope. */

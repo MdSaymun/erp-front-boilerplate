@@ -1,0 +1,105 @@
+{
+  "app": { "name": "ইনভেন্টরি SaaS", "skipToContent": "মূল বিষয়বস্তুতে যান" },
+  "actions": {
+    "save": "সংরক্ষণ",
+    "cancel": "বাতিল",
+    "create": "তৈরি করুন",
+    "edit": "সম্পাদনা",
+    "delete": "মুছুন",
+    "confirm": "নিশ্চিত করুন",
+    "keep": "রাখুন",
+    "close": "বন্ধ",
+    "retry": "আবার চেষ্টা",
+    "tryAgain": "আবার চেষ্টা করুন",
+    "reload": "পুনরায় লোড",
+    "export": "এক্সপোর্ট",
+    "import": "ইমপোর্ট",
+    "print": "প্রিন্ট",
+    "search": "অনুসন্ধান",
+    "refresh": "রিফ্রেশ",
+    "goToDashboard": "ড্যাশবোর্ডে যান",
+    "signIn": "সাইন ইন",
+    "signOut": "সাইন আউট",
+    "markAllRead": "সব পঠিত হিসেবে চিহ্নিত করুন"
+  },
+  "nav": {
+    "mainNavigation": "প্রধান নেভিগেশন",
+    "openNavigation": "নেভিগেশন খুলুন",
+    "collapseNavigation": "নেভিগেশন সংকুচিত করুন",
+    "breadcrumb": "ব্রেডক্রাম্ব",
+    "notifications": "বিজ্ঞপ্তি",
+    "userMenu": "{{name}} এর ব্যবহারকারী মেনু",
+    "profile": "প্রোফাইল",
+    "preferences": "পছন্দসমূহ",
+    "help": "সহায়তা ও শর্টকাট",
+    "about": "সম্পর্কে",
+    "globalSearch": "অনুসন্ধান… (Ctrl+K)",
+    "switchToDark": "ডার্ক থিমে যান",
+    "switchToLight": "লাইট থিমে যান",
+    "currentCompany": "বর্তমান কোম্পানি",
+    "noTenant": "কোনো টেন্যান্ট নেই",
+    "noCompany": "কোনো কোম্পানি নির্বাচিত নয়",
+    "guest": "অতিথি"
+  },
+  "preferences": {
+    "title": "পছন্দসমূহ",
+    "theme": "থিম",
+    "themeSystem": "সিস্টেম অনুসরণ",
+    "themeLight": "লাইট",
+    "themeDark": "ডার্ক",
+    "density": "টেবিল ঘনত্ব",
+    "densityCompact": "সংক্ষিপ্ত",
+    "densityComfortable": "আরামদায়ক",
+    "language": "ভাষা",
+    "languageAuto": "স্বয়ংক্রিয় (প্রোফাইল থেকে)"
+  },
+  "status": { "loading": "লোড হচ্ছে", "demoData": "ডেমো ডেটা", "placeholder": "প্লেসহোল্ডার" },
+  "errors": {
+    "somethingWrong": "কিছু ভুল হয়েছে",
+    "unexpected": "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।",
+    "pageNotFound": "পৃষ্ঠা পাওয়া যায়নি",
+    "pageNotFoundDetail": "আপনি যে পৃষ্ঠাটি খুঁজছেন তা নেই বা সরানো হয়েছে।",
+    "signInRequired": "সাইন ইন প্রয়োজন",
+    "signInRequiredDetail": "আপনার সেশনের মেয়াদ শেষ হয়েছে বা আপনি সাইন ইন করেননি।",
+    "accessDenied": "প্রবেশাধিকার নেই",
+    "accessDeniedDetail": "এই পৃষ্ঠা দেখার অনুমতি আপনার নেই।",
+    "serverError": "সার্ভার ত্রুটি",
+    "serverErrorDetail": "আমাদের দিকে কিছু ভুল হয়েছে। একটু পরে আবার চেষ্টা করুন।",
+    "reference": "রেফারেন্স: {{traceId}}"
+  },
+  "forms": {
+    "unsavedTitle": "অসংরক্ষিত পরিবর্তন বাতিল করবেন?",
+    "unsavedDescription": "আপনার কিছু পরিবর্তন সংরক্ষিত হয়নি। এই পৃষ্ঠা ছাড়লে সেগুলো হারিয়ে যাবে।",
+    "discard": "বাতিল",
+    "keepEditing": "সম্পাদনা চালিয়ে যান",
+    "correctFollowing": "অনুগ্রহ করে নিম্নলিখিতগুলো সংশোধন করুন",
+    "addLine": "লাইন যোগ করুন",
+    "noLines": "এখনো কোনো লাইন নেই"
+  },
+  "list": {
+    "selected": "{{count}}টি নির্বাচিত",
+    "clearSelection": "নির্বাচন মুছুন",
+    "columns": "কলাম",
+    "showAll": "সব দেখান",
+    "views": "ভিউ",
+    "saveView": "বর্তমান ভিউ সংরক্ষণ…",
+    "nothingHere": "এখনো কিছু নেই",
+    "rangeOfTotal": "{{total}} এর {{from}}–{{to}}"
+  },
+  "notifications": {
+    "title": "বিজ্ঞপ্তি",
+    "empty": "সব দেখা হয়ে গেছে",
+    "unread": "{{count}}টি অপঠিত"
+  },
+  "shortcuts": {
+    "title": "কীবোর্ড শর্টকাট",
+    "save": "বর্তমান ফর্ম সংরক্ষণ",
+    "commandPalette": "কমান্ড প্যালেট খুলুন",
+    "help": "কীবোর্ড শর্টকাট দেখান"
+  },
+  "about": {
+    "title": "{{name}} সম্পর্কে",
+    "version": "সংস্করণ {{version}}",
+    "environment": "পরিবেশ: {{environment}}"
+  }
+}

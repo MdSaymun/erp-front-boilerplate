@@ -1,6 +1,6 @@
 # Frontend module strategy
 
-How to add an ERP module (e.g. Purchasing) once its backend exists.
+How to add an ERP module (e.g. Purchasing). Fast path: `npm run generate:module -- purchasing --entity PurchaseOrder`, which produces every step below and registers the manifest. The manual steps explain what the generator wrote.
 
 ## 1. Create the feature module
 
@@ -18,20 +18,22 @@ src/features/purchasing/
 
 ## 2. Add module routes
 
-In `src/app/router/routes.tsx` replace the placeholder entry for the module with real child
-routes (list, detail `:id`, new/edit). Keep `handle` metadata (breadcrumb, title, module).
-Wrap with `PermissionRoute` where a permission key applies. Pages stay lazy-loaded.
+Declare them in the module manifest (`features/purchasing/module.tsx`, `routes`), relative
+to `basePath`: index, `orders`, `orders/new`, `orders/:id`, `orders/:id/edit`. Keep `handle`
+metadata (breadcrumb). The shell wraps the manifest with `ModuleRoute` and, when
+`permission` is set, `PermissionRoute`. Pages stay lazy-loaded via `lazyPage`.
 
 ## 3. Add module navigation
 
-Update the module's children in `src/config/navigation.tsx` with keys, labels, paths and
-optional permission keys. Do not hard-code menu items in layouts.
+Declare `navigation` in the manifest (absolute paths). It replaces the placeholder entry in
+`src/config/navigation.tsx`. Widgets and command-palette commands are declared the same way.
 
 ## 4. Add the module API layer
 
-Implement typed functions in `src/services/api/endpoints/purchasing.ts` (or the feature's
-`services/`) using `http`. Return plain DTOs. Use `ListQuery` / `PagedResult<T>` from
-`@/types/api` for lists.
+Create the resource clients with `createResourceApi<T>(path)` in the feature's `services/`
+(or `src/services/api/endpoints/purchasing.ts`). Custom verbs go through `api.action()`.
+Lists use `ListQuery` / `PagedResult<T>` from `@/types/api`. While the backend endpoint
+does not exist, add an MSW handler under `src/mocks/handlers/` and delete it later.
 
 ## 5. Add module types
 
@@ -40,14 +42,20 @@ Define DTOs in `features/purchasing/types/`, extending shared ERP types (`Docume
 
 ## 6. Add module hooks
 
-TanStack Query hooks with a `purchasingKeys` object; mutations invalidate the relevant keys.
-No API data in Zustand.
+`createResourceHooks('purchase-orders', purchaseOrdersApi)` gives list/detail/create/update/
+delete/action hooks with company-scoped keys and invalidation. Add custom hooks next to it
+for anything beyond CRUD. No API data in Zustand.
 
 ## 7. Add module components
 
-Compose `PageContainer`, `components/documents/*` (DocumentHeader, DocumentActionBar,
-LineItemsTable, DocumentTotals, ConfirmActionButton) and antd Table/Form. Follow the list /
-detail / form page patterns.
+- List page: `DataTable` + `useListQueryState` (columns, filters, bulk actions, export).
+- Record page: `RecordPage` + `DocumentHeader` + `RecordStageBar` + `useWorkflowActions`
+  - `RecordTabs` + `Chatter`.
+- Form page: `FormPage` + `ControlledFormItem` + shared inputs + `EditableLinesTable`
+  - `applyServerErrors` + `ConcurrencyConflictModal`.
+- Register dashboard widgets (`registerWidgets`) and palette commands (`registerCommands`)
+  from the module's `index.ts`.
+  See `frontend-ui-patterns.md` and the `/_dev/patterns` showcase.
 
 ## 8. Add tests
 

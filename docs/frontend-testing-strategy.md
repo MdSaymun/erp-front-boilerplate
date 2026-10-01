@@ -9,6 +9,13 @@
 | Integration | Vitest + Testing Library | real route table via memory router (`renderApp`): routing, guards, navigation                |
 | E2E (smoke) | Playwright               | production build in a real browser: shell, sidebar, dashboard, placeholder navigation        |
 
+## Mock API in tests
+
+`src/test/setup.ts` starts the MSW Node server with every handler from `src/mocks/handlers`
+and `onUnhandledFrame: 'error'`, so a request without a handler fails the test. Override
+per test with `server.use(http.get(api('/path'), ...))`; `resetMockData()` runs after each
+test. Playwright runs the same handlers through the browser worker (`VITE_MOCK_API=true`).
+
 ## Unit testing
 
 - Test behaviour, not implementation. No tests that merely assert a component renders without
@@ -29,11 +36,14 @@
 - `renderApp(path)` mounts the real `routes` through `createMemoryRouter`, so navigation, guards,
   breadcrumbs and lazy loading are exercised as in production.
 - Cover: root redirect, dashboard, module placeholders, active menu item, protected and
-  permission routes (with `authConfig.enforceAuthentication = true`), not-found.
+  permission routes (with `authConfig.enforceAuthentication = true`), not-found, and the
+  `/_dev/patterns` flows (list → record, create, server validation).
 
 ## E2E testing
 
-- `e2e/smoke/` runs against `vite preview` of a production build; no backend required.
+- `e2e/smoke/` (shell) and `e2e/patterns/` (list/record/form flows) run against
+  `vite preview` of a build with the mock API enabled; no backend required. Use the
+  `gotoApp` fixture, which waits for the mock worker.
 - Projects: desktop Chromium and a mobile viewport (drawer navigation).
 - Screenshots on failure, trace on first retry, HTML report in `playwright-report/`.
 - Keep smoke tests few and stable. Module-specific E2E is added with the module and may need a

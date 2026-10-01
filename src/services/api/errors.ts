@@ -69,10 +69,29 @@ export function isApiError(value: unknown): value is ApiError {
   return isObject(value) && value.name === 'ApiError' && typeof value.code === 'string';
 }
 
+/** Model-level (non-field) errors are reported under this key. */
+export const FORM_LEVEL_ERROR_FIELD = '_';
+
+/**
+ * Converts an ASP.NET member path such as `Lines[0].Quantity` into the dotted,
+ * camelCase form React Hook Form expects: `lines.0.quantity`.
+ */
+export function normalizeFieldPath(path: string): string {
+  if (path === '' || path === '$') return FORM_LEVEL_ERROR_FIELD;
+  return path
+    .replace(/^\$\./, '')
+    .replace(/\[(\d+)\]/g, '.$1')
+    .split('.')
+    .filter(Boolean)
+    .map((segment) =>
+      /^\d+$/.test(segment) ? segment : segment.charAt(0).toLowerCase() + segment.slice(1),
+    )
+    .join('.');
+}
+
 function toValidationErrors(errors: Record<string, unknown>): ValidationError[] {
   return Object.entries(errors).map(([field, messages]) => ({
-    // ASP.NET may use "" for model-level errors and PascalCase for members.
-    field: field === '' ? '_' : field.charAt(0).toLowerCase() + field.slice(1),
+    field: normalizeFieldPath(field),
     messages: Array.isArray(messages) ? messages.map(String) : [String(messages)],
   }));
 }

@@ -1,16 +1,28 @@
-# Inventory SaaS — Frontend
+# ERP Frontend Boilerplate
 
-Frontend for **Inventory SaaS**, the first module of a multi-tenant ERP SaaS platform.
-This repository currently contains the **application foundation**: the ERP shell, routing,
-API/state infrastructure, theming, testing and documentation. No business functionality yet.
+A production-grade, product-agnostic frontend for a **multi-tenant ERP SaaS**. Copy it to
+start any ERP product (inventory, sales, accounting, HR, POS, ...): the application shell,
+routing, data layer, standard list/record/form patterns, i18n, mock API, tests and tooling
+are already in place. You add business modules.
+
+**Start here:** [docs/getting-started-new-erp.md](docs/getting-started-new-erp.md).
+
+```bash
+npm install
+npm run init:project -- --name "Acme ERP"            # name the product
+npm run dev                                           # runs on mock data
+npm run generate:module -- sales --entity SalesOrder  # first business module
+```
 
 ## ERP vision
 
-Inventory is the entry point. The same frontend will grow into CRM, Sales, Purchasing,
-Accounting, POS, Manufacturing, HR, Payroll, Expenses, Projects, Assets, Helpdesk, E-commerce,
-Reporting/BI, Administration and SaaS billing. Every module shares one shell, one API client,
-one set of ERP domain types, and one design language. Concepts are inspired by established
-ERP workflows (documents, workflow states, parties, warehouses) with our own implementation.
+Modules (CRM, Sales, Purchasing, Inventory, Accounting, POS, Manufacturing, HR, Payroll,
+Expenses, Projects, Assets, Helpdesk, E-commerce, Reporting/BI, Administration, SaaS
+billing) plug into one shell through **module manifests** (`src/features/<key>/module.tsx`,
+registered in `src/features/registry.ts`). They share one API client, one set of ERP domain
+types (`src/types/erp.ts`), one design language and one set of UI patterns. Concepts follow
+established ERP workflows (documents, workflow states, parties, warehouses) with our own
+implementation.
 
 Multi-tenancy: **Tenant → Company → Branch → Warehouse → Location → Inventory**. The backend
 (ASP.NET Core, EF Core, SQL Server, shared database with TenantId isolation) enforces all
@@ -56,7 +68,7 @@ Configuration is read **only** in `src/config/env.ts` and validated with Zod at 
 
 | Variable            | Purpose                                     | Example                     |
 | ------------------- | ------------------------------------------- | --------------------------- |
-| `VITE_APP_NAME`     | Display name in the shell                   | `Inventory SaaS`            |
+| `VITE_APP_NAME`     | Display name in the shell                   | `Acme ERP`                  |
 | `VITE_API_BASE_URL` | Backend REST base URL (absolute)            | `http://localhost:5000/api` |
 | `VITE_ENVIRONMENT`  | `development` `test` `staging` `production` | `development`               |
 
@@ -108,11 +120,18 @@ No backend is required for the smoke suite.
 ```
 src/
   app/            App.tsx, providers (theme, query), router (routes, guards)
-  components/     shared UI: common, feedback, navigation, forms, documents
+  components/     shared UI: common, feedback, navigation, forms(+inputs), documents,
+                  data-table, records, chatter, auth, dashboard, import-export, reports,
+                  notifications, preferences, command-palette, shortcuts, about
+  i18n/           i18next setup and locale bundles
+  mocks/          Mock Service Worker handlers and fixtures
   layouts/        AuthLayout, DashboardLayout, ErrorLayout
-  features/       one folder per ERP module (core, auth, organization, inventory, …)
-  pages/          auth, dashboard, errors, placeholders
-  services/api/   axios client, interceptors, error normalization, endpoint groups
+  features/       one folder per ERP module; registry.ts lists module manifests;
+                  core/ = shared ERP foundation; developer/ = pattern showcase
+  pages/          auth, dashboard, errors, placeholders, dev/patterns (showcase)
+  services/api/   axios client, interceptors, token refresh, error normalization,
+                  list query contract, resource factory, chatter, endpoint groups
+  services/       shortcuts registry, command registry, realtime client
   stores/         zustand: auth, tenant, company, ui
   hooks/          usePermission, useCurrentContext, useLocaleSettings, useIsMobile…
   schemas/        shared Zod building blocks
@@ -126,9 +145,22 @@ e2e/              Playwright smoke tests and fixtures
 docs/             architecture, rules, module strategy, testing strategy
 ```
 
+## Scripts for new products and modules
+
+| Script                                                                                       | What it does                                                                                         |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `npm run init:project -- --name "Acme ERP" [--key acme-erp]`                                 | Renames the boilerplate into a product (package name, title, env, storage prefix, i18n)              |
+| `npm run generate:module -- <key> --entity <Entity> [--kind document\|master] [--path /x/y]` | Generates a module (manifest, types, schema, API, hooks, pages, test, mock handler) and registers it |
+
+## Developer showcase
+
+With `VITE_MOCK_API=true` the app runs entirely on mock data. Open **Developer → Patterns**
+(`/_dev/patterns`) to see the list, record, form, inputs, import, widgets and report
+patterns every module reuses. The route is excluded from production builds.
+
 ## Architecture
 
-See `docs/frontend-architecture.md`. Key points:
+See `docs/frontend-architecture.md` and `docs/frontend-ui-patterns.md`. Key points:
 
 - Feature-based modules with a shared ERP core (`src/types/erp.ts`, `src/components/documents/`).
 - TanStack Query for server state; Zustand for UI state only.
